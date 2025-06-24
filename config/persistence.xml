@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence 
+                                 https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+    
+    <persistence-unit name="polaris-pu" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        
+        <!-- Classes d'entités Polaris -->
+        <class>org.apache.polaris.core.entity.CatalogEntity</class>
+        <class>org.apache.polaris.core.entity.NamespaceEntity</class>
+        <class>org.apache.polaris.core.entity.TableEntity</class>
+        <class>org.apache.polaris.core.entity.PrincipalEntity</class>
+        <class>org.apache.polaris.core.entity.GrantEntity</class>
+        
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        
+        <properties>
+            <!-- Configuration de la base de données -->
+            <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" 
+                     value="jdbc:postgresql://${env.DB_HOST:localhost}:${env.DB_PORT:5432}/${env.DB_NAME:polaris}"/>
+            <property name="jakarta.persistence.jdbc.user" value="${env.DB_USER:polaris}"/>
+            <property name="jakarta.persistence.jdbc.password" value="${env.DB_PASSWORD:polaris123}"/>
+            
+            <!-- Configuration EclipseLink -->
+            <property name="eclipselink.target-database" value="PostgreSQL"/>
+            <property name="eclipselink.ddl-generation" value="create-or-extend-tables"/>
+            <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+            <property name="eclipselink.create-ddl-jdbc-file-name" value="create-tables.sql"/>
+            <property name="eclipselink.drop-ddl-jdbc-file-name" value="drop-tables.sql"/>
+            
+            <!-- Logging -->
+            <property name="eclipselink.logging.level" value="INFO"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+            <property name="eclipselink.logging.timestamp" value="true"/>
+            <property name="eclipselink.logging.thread" value="true"/>
+            <property name="eclipselink.logging.session" value="true"/>
+            
+            <!-- Pool de connexions -->
+            <property name="eclipselink.connection-pool.default.initial" value="5"/>
+            <property name="eclipselink.connection-pool.default.min" value="5"/>
+            <property name="eclipselink.connection-pool.default.max" value="20"/>
+            
+            <!-- Cache -->
+            <property name="eclipselink.cache.shared.default" value="true"/>
+            <property name="eclipselink.cache.size.default" value="1000"/>
+            <property name="eclipselink.cache.type.default" value="SoftWeak"/>
+            
+            <!-- Optimisations -->
+            <property name="eclipselink.jpa.batch-writing" value="JDBC"/>
+            <property name="eclipselink.jpa.batch-writing.size" value="100"/>
+            <property name="eclipselink.query.redirector" value="org.eclipse.persistence.queries.DatabaseQueryRedirector"/>
+            
+            <!-- Validation -->
+            <property name="eclipselink.jpa.uppercase-column-names" value="false"/>
+            <property name="eclipselink.persistence-context.reference-mode" value="FORCE_WEAK"/>
+            
+            <!-- Transactions -->
+            <property name="eclipselink.transaction.join-existing" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
